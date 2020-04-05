@@ -1,11 +1,14 @@
-#Redisgo - Atividade Prática – Redis
+# Redisgo - Atividade Prática – Redis
 
 - Abaixo segue o código fonte pra ficar fácil de passar o olho.
 - Abaixo segue também a saída do programa para ter uma ideia de como ficou o resultado.
 
-- O jogo foi desenvolvido em Java com maven. Usei a dependência maven do [redisson](https://redisson.org/) como client para acessar o Redis que rodou em uma imagem Docker em uma VM Ubuntu.
-- O Jar do programa `redinsgo.jar`, bem como todo o projeto seguem juntos, caso queira executar.
-- O servidor e a porta do servidor Redis podem ser passados por parametro, exemplo: `java -jar -Dserver=192.168.2.4 -Dport=6379 redinsgo.jar`. 
+- O jogo foi desenvolvido em Java com maven. Usei a dependência maven do [redisson](https://redisson.org/) como client para acessar o Redis que rodou em uma imagem Docker e em uma VM Ubuntu.
+- O Jar do programa `redinsgo.jar`, bem como todo o projeto seguem juntos, caso se queira executá-lo.
+- O servidor e a porta do servidor Redis podem ser passados por parametro, exemplo: 
+```
+java -jar -Dserver=192.168.2.4 -Dport=6379 redinsgo.jar 
+```
 Por padrão, se não passar nada, vai conectar no `localhost` e na porta `6379`.
 
 # O que foi usado do Redis via redisson
