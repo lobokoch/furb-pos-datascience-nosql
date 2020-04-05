@@ -39,7 +39,7 @@ if (score >= SCORE_VENCEDOR) {
 }
 ```
 
-#Saída do programa
+# Saída do programa
 
 ```
 Jogaremos 15 vezes para ver os resultados.
@@ -93,7 +93,9 @@ FIM!
 
 ```
 
-#Código fonte:
+Nota: pode ser visto a saída do programa na imagem `jogo.png` que está no diretório junto com o `.md`
+
+# Código fonte:
 ```java
 package br.com.koch.marcio;
 
