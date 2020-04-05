@@ -16,13 +16,11 @@ public class Redinsgo {
 	
 	private static final int NUMERO_PEDRAS = 99;
 	private static final int PEDRAS_POR_CARTELA = 15;
-	private static final int SCORE_VENCEDOR = 2;
+	private static final int SCORE_VENCEDOR = 15;
 	private static final int QUANTIDADE_JOGADORES = 50;
 	
-	public Redinsgo() {
-		Config config = new Config();
-        config.useSingleServer().setAddress("redis://192.168.2.11:6379");
-        redisson = Redisson.create(config);
+	public Redinsgo(RedissonClient redisson) {
+		this.redisson = redisson;
 	}
 	
 	private void createData(int quantity) {
@@ -63,7 +61,7 @@ public class Redinsgo {
 			Set<Integer> cartelaNumetos = bingoNumbers.random(n);
 			
 			if (cartelaNumetos.size() != n) {
-				throw new IllegalStateException(MessageFormat.format("Deveria ter retornado '{0}' números para a cartela, mas retornou '{1}'.", n, cartelaNumetos.size()));
+				throw new IllegalStateException(MessageFormat.format("Deveria ter retornado '{0}' numeros para a cartela, mas retornou '{1}'.", n, cartelaNumetos.size()));
 			}
 			
 			cartela.addAll(cartelaNumetos);
@@ -87,16 +85,10 @@ public class Redinsgo {
 		createData(quantity);
 		
 		runPlay(quantity);
-		
-		redisson.shutdown();
 	}
 
 	private void runPlay(int quantity) {
 		RSet<Integer> bingoNumbers = redisson.getSet("bingoNumbers");
-		bingoNumbers.clear();
-		for (int i = 1; i <= NUMERO_PEDRAS; i++) {
-			bingoNumbers.add(i);
-		}
 		
 		Integer pedra = bingoNumbers.removeRandom();
 		int vencedor = -1;
@@ -131,31 +123,49 @@ public class Redinsgo {
 		
 		
 		if (vencedor == -1) {
-			System.out.println("Não houve vencedor :(");
+			System.out.println("Nao houve vencedor :(");
 			return;
 		}
 		
 		String key = formatKey("user", vencedor);
 		RMap<String, String> user = redisson.getMap(key);	
 
-		System.out.println("O vendedor do BINGO com 15 acertos foi:" + user.get("name"));		
+		System.out.println("O vendedor do BINGO com 15 acertos foi: " + user.get("name"));		
 		
 	}
 
 	public static void main(String[] args) {
-		System.out.println("START!.");
+		System.out.println("Comecando o programa Redinsgo. " + 
+				"O servidor e a porta do servidor Redis podem ser passados por parametro, " + 
+				"exemplo: java -jar -Dserver=192.168.2.4 -Dport=6379 redinsgo.jar");
 		
-		System.out.println("Jogaremos 15 vezes");
+		Config config = new Config();
+		
+		String server = System.getProperty("server", "localhost");
+		String port = System.getProperty("port", "6379");
+		
+		// 192.168.2.4
+		String connUrl = MessageFormat.format("redis://{0}:{1}", server, port);
+		System.out.println("Conectando-se ao servidor:" + connUrl);
+		
+        config.useSingleServer().setAddress(connUrl);
+        RedissonClient redisson = Redisson.create(config);
+		
+        System.out.println(" ");
+		System.out.println("Jogaremos 15 vezes para ver os resultados.");
 		
 		for (int i = 1; i <= 15; i++) {
+			System.out.println("-----------------------------------------------------------");
 			System.out.println("Jogada " + i);
 			
-			Redinsgo jogo = new Redinsgo();
+			Redinsgo jogo = new Redinsgo(redisson);
 			jogo.play();
 			
-			System.out.println("------------------------------");
 		}
 		
+		redisson.shutdown();
+		
+		System.out.println("-----------------------------------------------------------");
 	    System.out.println("FIM!");
 
 	}
