@@ -61,3 +61,28 @@ R: match (m:Movie)-[rel]-(:Person {name: 'Tom Hanks'}) RETURN m.title, type(rel)
 acted in.
 R: match (m:Movie)-[rel:ACTED_IN]-(:Person {name: 'Tom Hanks'}) RETURN m.title, rel.roles
 
+### Exercício 4 – Filtering queries using WHERE clause
+
+Coloque os comandos utilizado em cada item a seguir:
+- Exercise 4.1: Retrieve all movies that Tom Cruise acted in.
+R: match (p:Person)-[:ACTED_IN]->(m:Movie) where p.name = 'Tom Cruise' RETURN m.title as Movie
+
+- Exercise 4.2: Retrieve all people that were born in the 70’s.
+R: match (p:Person) where p.born >= 1970 and p.born < 1980 RETURN p.name as `Pessoa`, p.born as `Ano nascimento` order by p.born
+
+- Exercise 4.3: Retrieve the actors who acted in the movie The Matrix
+who were born after 1960.
+R: match (p:Person)-[:ACTED_IN]->(m:Movie) where m.title='The Matrix' and p.born > 1960 RETURN p.name as `Pessoa`, p.born as `Ano nascimento` order by p.born
+
+- Exercise 4.4: Retrieve all movies by testing the node label and a
+property.
+R: match (m) where m:Movie and m.released >= 2000 return m.title as Title
+
+- Exercise 4.5: Retrieve all people that wrote movies by testing the
+relationship between two nodes.
+R: MATCH (p)-[rel]->(m) WHERE p:Person AND m:Movie AND type(rel) = 'WROTE' RETURN p.name as Nome, m.title as Filme
+
+- Exercise 4.6: Retrieve all people in the graph that do not have a
+property.
+R: match (a) where a:Person and not exists(a.born) RETURN a.name as `Pessoa sem data de nascimento`
+
