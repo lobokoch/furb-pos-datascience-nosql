@@ -277,3 +277,67 @@ R: MATCH (p:Person) WHERE p.name = 'Zoe Saldana-Perego' REMOVE p.birthPlace
 - Exercise 8.18: Retrieve the node to confirm that the property has been removed.
 
 R: MATCH (p:Person) WHERE p.name = 'Zoe Saldana-Perego' RETURN p
+
+### Exercício 9 – Creating relationships
+Coloque os comandos utilizado em cada item a seguir:
+
+- Exercise 9.1: Create ACTED_IN relationships.
+
+R: MATCH (m:Movie) WHERE m.title = 'Forrest Gump' MATCH (p:Person) WHERE p.name = 'Tom Hanks' OR p.name = 'Robin Wright' OR p.name = 'Gary Sinise' CREATE (p)-[:ACTED_IN]->(m)
+
+- Exercise 9.2: Create DIRECTED relationships.
+
+R: MATCH (m:Movie) WHERE m.title = 'Forrest Gump' MATCH (p:Person) WHERE p.name = 'Robert Zemeckis' CREATE (p)-[:DIRECTED]->(m)
+
+- Exercise 9.3: Create a HELPED relationship.
+
+R: MATCH (p1:Person) WHERE p1.name = 'Tom Hanks' MATCH (p2:Person) WHERE p2.name = 'Gary Sinise' CREATE (p1)-[:HELPED]->(p2)
+
+- Exercise 9.4: Query nodes and new relationships.
+
+R: MATCH (p:Person)-[rel]-(m:Movie) WHERE m.title = 'Forrest Gump' RETURN p, rel, m
+
+- Exercise 9.5: Add properties to relationships.
+
+R: MATCH (p:Person)-[rel:ACTED_IN]->(m:Movie)
+WHERE m.title = 'Forrest Gump'
+SET rel.roles =
+CASE p.name
+  WHEN 'Tom Hanks' THEN ['Forrest Gump']
+  WHEN 'Robin Wright' THEN ['Jenny Curran']
+  WHEN 'Gary Sinise' THEN ['Lieutenant Dan Taylor']
+END
+
+- Exercise 9.6: Add a property to the HELPED relationship.
+
+R: MATCH (p1:Person)-[rel:HELPED]->(p2:Person)
+WHERE p1.name = 'Tom Hanks' AND p2.name = 'Gary Sinise'
+SET rel.research = 'war history'
+
+- Exercise 9.7: View the current list of property keys in the graph.
+
+R: call db.propertyKeys
+
+- Exercise 9.8: View the current schema of the graph.
+
+R: call db.schema
+
+- Exercise 9.9: Retrieve the names and roles for actors.
+
+R: MATCH (p:Person)-[rel:ACTED_IN]->(m:Movie) WHERE m.title = 'Forrest Gump' RETURN p.name, rel.roles
+
+- Exercise 9.10: Retrieve information about any specific relationships.
+
+R: MATCH (p1:Person)-[rel:HELPED]-(p2:Person) RETURN p1.name, rel, p2.name
+
+- Exercise 9.11: Modify a property of a relationship.
+
+R: MATCH (p:Person)-[rel:ACTED_IN]->(m:Movie) WHERE m.title = 'Forrest Gump' AND p.name = 'Gary Sinise' SET rel.roles =['Lt. Dan Taylor'] 
+
+- Exercise 9.12: Remove a property from a relationship.
+
+R: MATCH (p1:Person)-[rel:HELPED]->(p2:Person) WHERE p1.name = 'Tom Hanks' AND p2.name = 'Gary Sinise' REMOVE rel.research
+
+- Exercise 9.13: Confirm that your modifications were made to the graph.
+
+R: MATCH (p:Person)-[rel:ACTED_IN]->(m:Movie) WHERE m.title = 'Forrest Gump' return p, rel, m
