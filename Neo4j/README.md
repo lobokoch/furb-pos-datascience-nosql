@@ -153,3 +153,28 @@ R: MATCH (a:Person)-[:ACTED_IN]->(m:Movie) WITH  a, count(a) AS numMovies, colle
 - Exercise 5.12: Retrieve the movies that have at least 2 directors with other optional data.
 R: MATCH (m:Movie) WITH m, size((:Person)-[:DIRECTED]->(m)) AS directors WHERE directors >= 2 OPTIONAL MATCH (p:Person)-[:REVIEWED]->(m) RETURN  m.title, p.name
 
+### Exercício 6 – Controlling results returned
+Coloque os comandos utilizado em cada item a seguir:
+- Exercise 6.1: Execute a query that returns duplicate records.
+
+R: MATCH (a:Person)-[:ACTED_IN]->(m:Movie) WHERE m.released >= 1990 AND m.released < 2000 RETURN DISTINCT m.released, m.title, collect(a.name)
+
+- Exercise 6.2: Modify the query to eliminate duplication.
+
+R: MATCH (a:Person)-[:ACTED_IN]->(m:Movie) WHERE m.released >= 1990 AND m.released < 2000 RETURN  m.released, collect(m.title), collect(a.name)
+
+- Exercise 6.3: Modify the query to eliminate more duplication.
+
+R: MATCH (a:Person)-[:ACTED_IN]->(m:Movie) WHERE m.released >= 1990 AND m.released < 2000 RETURN  m.released, collect(DISTINCT m.title), collect(a.name)
+
+- Exercise 6.4: Sort results returned.
+
+R: MATCH (a:Person)-[:ACTED_IN]->(m:Movie) WHERE m.released >= 1990 AND m.released < 2000 RETURN  m.released, collect(DISTINCT m.title), collect(a.name) ORDER BY m.released DESC
+
+- Exercise 6.5: Retrieve the top 5 ratings and their associated movies.
+
+R: MATCH (:Person)-[r:REVIEWED]->(m:Movie) RETURN  m.title AS movie, r.rating AS rating ORDER BY r.rating DESC LIMIT 5
+
+- Exercise 6.6: Retrieve all actors that have not appeared in more than 3 movies.
+
+R: MATCH (a:Person)-[:ACTED_IN]->(m:Movie) WITH  a,  count(a) AS numMovies, collect(m.title) AS movies WHERE numMovies <= 3 RETURN a.name, movies
