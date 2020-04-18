@@ -39,3 +39,25 @@ R: match(m:Movie) return m.title, m.released, m.tagline
 
 - Exercise 2.6: Display more user-friendly headers in the table
 R: match(m:Movie) return m.title as `Título`, m.released as `Lançamento` , m.tagline as `Tópico`
+
+### Exercício 3 - Filtering queries using relationships
+Coloque os comandos utilizado em cada item a seguir:
+- Exercise 3.1: Display the schema of the database.
+R: db.schema 
+Nota: ocorre o erro: Neo.ClientError.Procedure.ProcedureNotFound
+
+- Exercise 3.2: Retrieve all people who wrote the movie Speed Racer.
+R: match (p:Person)-[:WROTE]->(:Movie {title: 'Speed Racer'}) RETURN p.name
+
+- Exercise 3.3: Retrieve all movies that are connected to the person,
+Tom Hanks.
+R: match (m:Movie)<--(:Person {name: 'Tom Hanks'}) RETURN m.title
+
+- Exercise 3.4: Retrieve information about the relationships Tom Hanks
+had with the set of movies retrieved earlier.
+R: match (m:Movie)-[rel]-(:Person {name: 'Tom Hanks'}) RETURN m.title, type(rel)
+
+- Exercise 3.5: Retrieve information about the roles that Tom Hanks
+acted in.
+R: match (m:Movie)-[rel:ACTED_IN]-(:Person {name: 'Tom Hanks'}) RETURN m.title, rel.roles
+
