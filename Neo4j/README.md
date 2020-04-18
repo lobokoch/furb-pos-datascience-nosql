@@ -86,3 +86,24 @@ R: MATCH (p)-[rel]->(m) WHERE p:Person AND m:Movie AND type(rel) = 'WROTE' RETUR
 property.
 R: match (a) where a:Person and not exists(a.born) RETURN a.name as `Pessoa sem data de nascimento`
 
+- Exercise 4.7: Retrieve all people related to movies where the
+relationship has a property.
+R: MATCH (a:Person)-[rel]->(m:Movie) WHERE exists(rel.rating) RETURN a.name as Name, m.title as Movie, rel.rating as Rating
+
+- Exercise 4.8: Retrieve all actors whose name begins with James.
+R: MATCH (a:Person)-[:ACTED_IN]->(:Movie) WHERE a.name STARTS WITH 'James' RETURN a.name
+
+- Exercise 4.9: Retrieve all REVIEW relationships from the graph with filtered results.
+R: MATCH (:Person)-[r:REVIEWED]->(m:Movie) WHERE toLower(r.summary) CONTAINS 'fun' RETURN  m.title as Movie, r.summary as Review, r.rating as Rating
+
+- Exercise 4.10: Retrieve all people who have produced a movie, but have not directed a movie.
+R: MATCH (a:Person)-[:PRODUCED]->(m:Movie) WHERE NOT ((a)-[:DIRECTED]->(:Movie)) RETURN a.name, m.title
+
+- Exercise 4.11: Retrieve the movies and their actors where one of the actors also directed the movie.
+R: MATCH (a1:Person)-[:ACTED_IN]->(m:Movie)<-[:ACTED_IN]-(a2:Person) WHERE exists( (a2)-[:DIRECTED]->(m) ) RETURN  a1.name as Actor, a2.name as `Actor/Director`, m.title as Movie
+
+- Exercise 4.12: Retrieve all movies that were released in a set of years.
+R: MATCH (m:Movie) WHERE m.released in [2000, 2004, 2008] RETURN m.title, m.released 
+
+- Exercise 4.13: Retrieve the movies that have an actor’s role that is the name of the movie.
+R: MATCH (a:Person)-[r:ACTED_IN]->(m:Movie) WHERE m.title in r.roles RETURN  m.title as Movie, a.name as Actor, r.roles as Roles
