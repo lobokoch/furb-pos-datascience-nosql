@@ -178,3 +178,22 @@ R: MATCH (:Person)-[r:REVIEWED]->(m:Movie) RETURN  m.title AS movie, r.rating AS
 - Exercise 6.6: Retrieve all actors that have not appeared in more than 3 movies.
 
 R: MATCH (a:Person)-[:ACTED_IN]->(m:Movie) WITH  a,  count(a) AS numMovies, collect(m.title) AS movies WHERE numMovies <= 3 RETURN a.name, movies
+
+### Exercício 7 – Working with cypher data
+
+Coloque os comandos utilizado em cada item a seguir:
+- Exercise 7.1: Collect and use lists.
+
+R: MATCH (a:Person)-[:ACTED_IN]->(m:Movie), (m)<-[:PRODUCED]-(p:Person) WITH  m, collect(DISTINCT a.name) AS cast, collect(DISTINCT p.name) AS producers RETURN DISTINCT m.title, cast, producers ORDER BY size(cast)
+
+- Exercise 7.2: Collect a list.
+
+R: MATCH (p:Person)-[:ACTED_IN]->(m:Movie) WITH p, collect(m) AS movies WHERE size(movies)  > 5 RETURN p.name, movies
+
+- Exercise 7.3: Unwind a list.
+
+R: MATCH (p:Person)-[:ACTED_IN]->(m:Movie) WITH p, collect(m) AS movies WHERE size(movies)  > 5 WITH p, movies UNWIND movies AS movie RETURN p.name, movie.title
+
+- Exercise 7.4: Perform a calculation with the date type.
+
+R: MATCH (a:Person)-[:ACTED_IN]->(m:Movie) WHERE a.name = 'Tom Hanks' RETURN  m.title, m.released, date().year  - m.released as yearsAgoReleased, m.released  - a.born AS `age of Tom` ORDER BY yearsAgoReleased
