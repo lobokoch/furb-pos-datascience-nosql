@@ -341,3 +341,31 @@ R: MATCH (p1:Person)-[rel:HELPED]->(p2:Person) WHERE p1.name = 'Tom Hanks' AND p
 - Exercise 9.13: Confirm that your modifications were made to the graph.
 
 R: MATCH (p:Person)-[rel:ACTED_IN]->(m:Movie) WHERE m.title = 'Forrest Gump' return p, rel, m
+
+### Exercício 10 – Deleting nodes and relationships
+
+Coloque os comandos utilizado em cada item a seguir:
+
+- Exercise 10.1: Delete a relationship.
+
+R: MATCH (:Person)-[rel:HELPED]-(:Person) DELETE rel
+
+- Exercise 10.2: Confirm that the relationship has been deleted.
+
+R: MATCH (:Person)-[rel:HELPED]-(:Person) RETURN rel
+
+- Exercise 10.3: Retrieve a movie and all of its relationships.
+
+R: MATCH (p:Person)-[rel]-(m:Movie) WHERE m.title = 'Forrest Gump' RETURN p, rel, m
+
+- Exercise 10.4: Try deleting a node without detaching its relationships.
+
+R: MATCH (m:Movie) WHERE m.title = 'Avatar' DELETE m
+
+- Exercise 10.5: Delete a Movie node, along with its relationships.
+
+R: MATCH (m:Movie) WHERE m.title = 'Forrest Gump' DETACH DELETE m
+
+- Exercise 10.6: Confirm that the Movie node has been deleted.
+
+R: MATCH (p:Person)-[rel]-(m:Movie) WHERE m.title = 'Forrest Gump' RETURN p, rel, m
