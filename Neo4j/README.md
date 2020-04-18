@@ -197,3 +197,83 @@ R: MATCH (p:Person)-[:ACTED_IN]->(m:Movie) WITH p, collect(m) AS movies WHERE si
 - Exercise 7.4: Perform a calculation with the date type.
 
 R: MATCH (a:Person)-[:ACTED_IN]->(m:Movie) WHERE a.name = 'Tom Hanks' RETURN  m.title, m.released, date().year  - m.released as yearsAgoReleased, m.released  - a.born AS `age of Tom` ORDER BY yearsAgoReleased
+
+
+### Exercício 8 – Creating nodes
+Coloque os comandos utilizado em cada item a seguir:
+- Exercise 8.1: Create a Movie node.
+
+R: CREATE (:Movie {title: 'Avatar'})
+
+- Exercise 8.2: Retrieve the newly-created node.
+
+R: MATCH (m:Movie) WHERE m.title = 'Avatar' RETURN m
+
+- Exercise 8.3: Create a Person node.
+
+R: CREATE (:Person {name: 'Zoe Saldana-Perego'})
+
+- Exercise 8.4: Retrieve the newly-created node.
+
+R: MATCH (p:Person) WHERE p.name = 'Zoe Saldana-Perego' RETURN p
+
+- Exercise 8.5: Add a label to a node.
+
+R: MATCH (m:Movie) WHERE m.released < 2009 SET m:OlderMovie RETURN DISTINCT labels(m)
+
+- Exercise 8.6: Retrieve the node using the new label.
+
+R: MATCH (m:OlderMovie) RETURN m.title, m.released 
+
+- Exercise 8.7: Add the Female label to selected nodes.
+
+R: MATCH (p:Person) WHERE p.name STARTS WITH 'Zoe' SET p:Female
+
+- Exercise 8.8: Retrieve all Female nodes.
+
+R: MATCH (p:Female) RETURN p.name
+
+- Exercise 8.9: Remove the Female label from the nodes that have this label.
+
+R: MATCH (p:Female) REMOVE p:Female
+
+- Exercise 8.10: View the current schema of the graph.
+
+R: CALL db.schema
+
+- Exercise 8.11: Add properties to a movie.
+
+R: MATCH (m:Movie)
+WHERE m.title = 'Avatar'
+SET m:OlderMovie,
+    m.released = 2009,
+    m.tagline = "We can hear Navi",
+    m.lengthInMinutes = 162
+
+- Exercise 8.12: Retrieve an OlderMovie node to confirm the label and properties.
+
+R: MATCH (m:OlderMovie) WHERE m.title = 'Avatar' RETURN m
+
+- Exercise 8.13: Add properties to the person, Zoe Saldana-Perego.
+
+R: MATCH (p:Person) WHERE p.name = 'Zoe Saldana-Perego' SET p.born = 1978, p.birthPlace = ' Nova Jersey'
+
+- Exercise 8.14: Retrieve an updated Person node.
+
+R: MATCH (p:Person) WHERE p.name = 'Zoe Saldana-Perego' RETURN p
+
+- Exercise 8.15: Remove a property from a Movie node.
+
+R: MATCH (m:Movie) WHERE m.title = 'Avatar' SET m.lengthInMinutes = null
+
+- Exercise 8.16: Retrieve the node to confirm that the property has been removed.
+
+R: MATCH (m:Movie) WHERE m.title = 'Avatar' RETURN m
+
+- Exercise 8.17: Remove a property from a Person node.
+
+R: MATCH (p:Person) WHERE p.name = 'Zoe Saldana-Perego' REMOVE p.birthPlace
+
+- Exercise 8.18: Retrieve the node to confirm that the property has been removed.
+
+R: MATCH (p:Person) WHERE p.name = 'Zoe Saldana-Perego' RETURN p
