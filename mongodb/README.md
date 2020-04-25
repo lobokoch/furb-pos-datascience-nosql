@@ -5,56 +5,76 @@
 1. Adicione outro Peixe e um Hamster com nome Frodo
 
 R:
+db.pets.insert({name: "Frodo", species: "Hamster"})
+db.pets.insert({name: "Frodo", species: "Peixe"})
 
 2. Faça uma contagem dos pets na coleção
 
-R:
+R: db.pets.count()
 
 3. Retorne apenas um elemento o método prático possível
 
-R:
+R: db.pets.find({}, {"name": 1})
 
 4. Identifique o ID para o Gato Kilha.
 
-R:
+R: db.pets.find({"name": "Kilha"}, {"_id":1})
 
 5. Faça uma busca pelo ID e traga o Hamster Mike
 
-R:
+R: db.pets.find({"_id" : ObjectId("5ea420eade107b00061856fa")})
 
 6. Use o find para trazer todos os Hamsters
 
-R:
+R: db.pets.find({"species" : "Hamster"})
 
 7. Use o find para listar todos os pets com nome Mike
 
-R:
+R: db.pets.find({"name" : "Mike"})
 
 8. Liste apenas o documento que é um Cachorro chamado Mike
 
-R:
+R: db.pets.find({"name" : "Mike", "species" : "Cachorro"})
 
 
 ### Exercício 2 – Mama mia!
 
-1. Liste/Conte todas as pessoas que tem exatamente 99 anos. Você pode usar um count para indicar a quantidade.
+1. Liste/Conte todas as pessoas que tem exatamente 99 anos. 
+Você pode usar um count para indicar a quantidade.
 
-R:
+R: db.italians.find({"age": 99}).count() 
+0
 
 
-2. Identifique quantas pessoas são elegíveis atendimento prioritário (pessoas com mais de 65 anos)
+2. Identifique quantas pessoas são elegíveis atendimento 
+prioritário (pessoas com mais de 65 anos)
 
-R:
+R: db.italians.find({"age": { "$te": 65 }}).count()
+1809
+
 
 
 3. Identifique todos os jovens (pessoas entre 12 a 18 anos).
 
-R:
+R: db.italians.find({"age": { "$gte": 12, "$lte": 18 }}).count()
+902
 
 
-4. Identifique quantas pessoas tem gatos, quantas tem cachorro e quantas não tem nenhum dos dois
+4. Identifique quantas pessoas tem gatos, quantas tem cachorro e 
+quantas não tem nenhum dos dois
 
-R:
+R: 
+- Gatos:
+db.italians.find({cat: { $exists: true }}).count()
+5982
+
+- Cachorros:
+db.italians.find({dog: { $exists: true }}).count()
+3969
+
+- Quantas não tem nenhum dos dois:
+db.italians.find({cat: { $exists: false }, dog: {$exists: false}}).count()
+2445
 
 
 5. Liste/Conte todas as pessoas acima de 60 anos que tenham gato
