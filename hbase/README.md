@@ -52,11 +52,11 @@ R:
 R:
 get 'italians', '11', {COLUMN => 'personal-data:city', VERSIONS => 5}
 - COLUMN                                               CELL                                                                                                                                                   
--- personal-data:city                                  timestamp=1588066819259, value=Floripa                                                                                                                 
--- personal-data:city                                  timestamp=1588066817336, value=Gaspar                                                                                                                  
--- personal-data:city                                  timestamp=1588066817284, value=Taio                                                                                                                    
--- personal-data:city                                  timestamp=1588066817216, value=Pomerode                                                                                                                
--- personal-data:city                                  timestamp=1588066752493, value=Blumenau 
+- personal-data:city                                  timestamp=1588066819259, value=Floripa                                                                                                                 
+- personal-data:city                                  timestamp=1588066817336, value=Gaspar                                                                                                                  
+- personal-data:city                                  timestamp=1588066817284, value=Taio                                                                                                                    
+- personal-data:city                                  timestamp=1588066817216, value=Pomerode                                                                                                                
+- personal-data:city                                  timestamp=1588066752493, value=Blumenau 
 
 
 5. Utilize o scan para mostrar apenas o nome e profissão dos italianos.
